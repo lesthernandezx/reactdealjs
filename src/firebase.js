@@ -15,6 +15,8 @@ const firebaseConfig = {
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET
 }
 
-// Initialize Firebase
+// Initialize Firebase and Firebase Authentication
 const app = initializeApp(firebaseConfig)
-export const auth = getAuth(app)
+const auth = getAuth(app)
+
+export {auth}

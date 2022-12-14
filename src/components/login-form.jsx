@@ -1,3 +1,4 @@
+import {useState} from 'react'
 import React, { useRef } from 'react'
 import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
@@ -9,7 +10,10 @@ import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
-// import { useAuth } from '../Authprovider'
+
+import {signInWithEmailAndPassword} from '@firebase/auth'
+import {auth} from '../firebase'
+import {useAuthValue} from '../AuthContext'
 
 export default function LoginForm (){
 
@@ -17,7 +21,8 @@ export default function LoginForm (){
 
   const passwordField = useRef()
 
-//   const { signIn } = useAuth()
+  const {setTimeActive} = useAuthValue()
+  const [error, setError] = useState('')
 
   const handleLogin = async () => {
     const email = emailField.current.value
@@ -25,13 +30,12 @@ export default function LoginForm (){
     console.log('email', email)
     console.log('password', password)
 
-    // await signIn(email, password)
-    // try {
-    //   console.log('🚀 ~ signup ok')
-    // } catch (error) {
-    //   console.log('🚀 ~ signup error', error)
-    // }
-  }
+    signInWithEmailAndPassword(auth, email, password)
+    .then((response) => {
+      console.log ('response', response);
+    })
+    .catch(err => setError(err.message))
+    }
 
   return <div>
     <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -73,7 +77,6 @@ export default function LoginForm (){
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
-                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   onClick={handleLogin}
                 >
                   Sign In
